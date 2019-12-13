@@ -1,0 +1,36 @@
+main {
+  display: flex;
+  min-height: 100vh;
+  max-height: 100vh;
+  box-sizing: border-box;
+}
+
+.left-side {
+  background-color: #000;
+  width: 25%;
+  display: flex;
+  justify-content: center;
+}
+.gallery img {
+  display: block;
+  margin-bottom: 10px;
+}
+.gallery img:last-child {
+  margin-bottom: 0;
+}
+.gallery {
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+.right-side {
+  background-color: gold;
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+#info {
+    text-align: center;
+}
