@@ -1,0 +1,37 @@
+{
+  "name": "gallery",
+  "version": "1.0.0",
+  "description": "Gallery",
+  "main": "js/script.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode development",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"js/**/*.js\"",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oscar-Sherelis/gallery.git"
+  },
+  "keywords": [
+    "Gallery",
+    "enlarge",
+    "image"
+  ],
+  "author": "Oscar Sherelis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oscar-Sherelis/gallery/issues"
+  },
+  "homepage": "https://github.com/Oscar-Sherelis/gallery#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "babel-loader": "^8.0.6",
+    "html-webpack-plugin": "^3.2.0",
+    "prettier": "1.19.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  }
+}
