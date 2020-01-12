@@ -1,6 +1,12 @@
 require("regenerator-runtime/runtime");
 require("core-js/stable");
 
+// solution to not working append for IE
+import 'mdn-polyfills/Node.prototype.append';
+
+require('mdn-polyfills/CustomEvent');
+require('mdn-polyfills/String.prototype.padStart');
+
 function ImageLoader() {
   // @param leftSideGalleryContainer tage where images will be loaded.
   // Ex: document.querySelector('.gallery')
