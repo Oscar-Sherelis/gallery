@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
-    entry: './js/script.js',
+    entry: ['core-js/fn/promise', 'core-js/stable/object/assign', './js/script.js'],
     output: {
       path: __dirname + '/dist',
       publicPath: '/',

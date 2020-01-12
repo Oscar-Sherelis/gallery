@@ -1,3 +1,6 @@
+require("regenerator-runtime/runtime");
+require("core-js/stable");
+
 function ImageLoader() {
   // @param leftSideGalleryContainer tage where images will be loaded.
   // Ex: document.querySelector('.gallery')
@@ -13,6 +16,7 @@ function ImageLoader() {
     });
   };
 }
+// https://stackoverflow.com/questions/33527653/babel-6-regeneratorruntime-is-not-defined
 // https://ccoenraets.github.io/es6-tutorial/setup-babel/
 
 let loadImages = new ImageLoader();
@@ -38,21 +42,13 @@ async function addInfoAndImage(clickedImage) {
 
   let selectedImage = clickedImage.src;
   let stringArray = selectedImage.split('/');
-  urlInfo = 'https://picsum.photos/id/' + stringArray[4] + '/info';
+  let urlInfo = 'https://picsum.photos/id/' + stringArray[4] + '/info';
 
   // getting data and adding above image
   let test = await fetch(urlInfo);
   let result = await test.json();
-
-  const info = document.querySelector('#info');
-  info.innerHTML =
-    'Author: ' +
-    result.author +
-    ' height: ' +
-    result.height +
-    ' width: ' +
-    result.width;
-  textHeight = info.offsetHeight;
+  
+  let finalHeight, finalWidth;
 
   if (result.width > result.height) {
     if (result.width > divWidth) {
