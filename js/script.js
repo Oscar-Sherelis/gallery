@@ -1,11 +1,3 @@
-require("regenerator-runtime/runtime");
-require("core-js/stable");
-
-// solution to not working append for IE
-import 'mdn-polyfills/Node.prototype.append';
-
-require('mdn-polyfills/CustomEvent');
-require('mdn-polyfills/String.prototype.padStart');
 
 function ImageLoader() {
   // @param leftSideGalleryContainer tage where images will be loaded.
@@ -18,42 +10,35 @@ function ImageLoader() {
       let galleryImage = document.createElement('img');
       let imgSrc = 'https://picsum.photos/id/' + image.id + '/200';
       galleryImage.setAttribute('src', imgSrc);
+      galleryImage.setAttribute('alt', 'gallery image')
       leftSideGalleryContainer.append(galleryImage);
     });
   };
 }
-// https://stackoverflow.com/questions/33527653/babel-6-regeneratorruntime-is-not-defined
-// https://ccoenraets.github.io/es6-tutorial/setup-babel/
 
-let loadImages = new ImageLoader();
-loadImages.loadLeftSide(document.querySelector('.gallery'));
+// adds event without any actions
+function AddEvent () {}
 
-const enlargedImage = document.querySelector('.enlarged-image img');
+// adds event actions
+function EventActions () {}
 
-const images = document.querySelectorAll('.gallery img').forEach(image => {
-  image.addEventListener('click', () => {
-    addInfoAndImage(image);
-  });
-});
+// creating event action
+EventActions.prototype.enlargeImage = async function (selectedImage, imageContainer, selectedEmptyImg) {
+  // check container size
+  let divWidth = imageContainer.offsetWidth;
+  let divHeight = imageContainer.offsetHeight;
 
-async function addInfoAndImage(clickedImage) {
-  let leftSideImages = await fetch('https://picsum.photos/v2/list');
-  let leftSideImagesParsed = await leftSideImages.json();
-  leftSideImagesParsed.forEach(image => {
-    console.log(image);
-  });
+  // getting selected image src
+  let selectedImageSrc = selectedImage.src;
+  let stringArray = selectedImageSrc.split('/');
 
-  let divWidth = document.querySelector('.right-side').offsetWidth;
-  let divHeight = document.querySelector('.right-side').offsetHeight;
-
-  let selectedImage = clickedImage.src;
-  let stringArray = selectedImage.split('/');
   let urlInfo = 'https://picsum.photos/id/' + stringArray[4] + '/info';
 
   // getting data and adding above image
-  let test = await fetch(urlInfo);
-  let result = await test.json();
+  let urlData = await fetch(urlInfo);
+  let result = await urlData.json();
   
+  // resizing image according to image from API
   let finalHeight, finalWidth;
 
   if (result.width > result.height) {
@@ -68,13 +53,37 @@ async function addInfoAndImage(clickedImage) {
     }
   }
 
-  // stringArray[4] === id
-  enlargedImage.src =
-    'https://picsum.photos/id/' +
-    stringArray[4] +
-    '/' +
-    finalWidth +
-    '/' +
-    finalHeight;
-  enlargedImage.alt = 'enlarged image';
+  selectedEmptyImg.src = 'https://picsum.photos/id/' + stringArray[4] + '/' + finalWidth + '/' + finalHeight;
+  selectedEmptyImg.alt = 'enlarged image';
 }
+
+
+AddEvent.prototype = Object.create(EventActions.prototype)
+
+// creating event for selected elements (images)
+// document.querySelectorAll('.enlarged-image img');
+AddEvent.prototype.eventForImages = async function (selectedElements) {
+
+  selectedElements.forEach(element => {
+  element.addEventListener('click', () => {
+    // @param element - image
+    // @param .right-side - container for image scaling
+    this.enlargeImage(element, document.querySelector('.right-side'), document.querySelector('.enlarged-image img'))
+    })
+  }
+)}
+
+ImageLoader.prototype = Object.create(AddEvent.prototype)
+
+// loading images
+let loadImages = new ImageLoader();
+
+async function runAll () {
+  await loadImages.loadLeftSide(document.querySelector('.gallery'));
+
+  // console.log(loadImages)
+  loadImages.eventForImages([...document.querySelectorAll('.gallery img')])
+  
+}
+
+runAll()
