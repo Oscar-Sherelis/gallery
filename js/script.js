@@ -1,4 +1,3 @@
-
 function ImageLoader() {
   // @param leftSideGalleryContainer tage where images will be loaded.
   // Ex: document.querySelector('.gallery')
@@ -8,7 +7,13 @@ function ImageLoader() {
 
     leftSideImagesParsed.forEach(image => {
       let galleryImage = document.createElement('img');
-      let imgSrc = 'https://picsum.photos/id/' + image.id + '/200';
+      let bodyWidth = document.querySelector('body').offsetWidth
+      let imgSrc
+
+      bodyWidth > 500 
+      ? imgSrc = 'https://picsum.photos/id/' + image.id + '/200'
+      : imgSrc = 'https://picsum.photos/id/' + image.id + '/100'
+
       galleryImage.setAttribute('src', imgSrc);
       galleryImage.setAttribute('alt', 'gallery image')
       leftSideGalleryContainer.append(galleryImage);
@@ -16,10 +21,10 @@ function ImageLoader() {
   };
 }
 
-// adds event without any actions
+// adds event without any action
 function AddEvent () {}
 
-// adds event actions
+// adds event action
 function EventActions () {}
 
 // creating event action
@@ -57,6 +62,7 @@ EventActions.prototype.enlargeImage = async function (selectedImage, imageContai
   selectedEmptyImg.alt = 'enlarged image';
 }
 
+// end of event creating
 
 AddEvent.prototype = Object.create(EventActions.prototype)
 
@@ -68,6 +74,7 @@ AddEvent.prototype.eventForImages = async function (selectedElements) {
   element.addEventListener('click', () => {
     // @param element - image
     // @param .right-side - container for image scaling
+    // selecting event from EventActions
     this.enlargeImage(element, document.querySelector('.right-side'), document.querySelector('.enlarged-image img'))
     })
   }
@@ -75,15 +82,10 @@ AddEvent.prototype.eventForImages = async function (selectedElements) {
 
 ImageLoader.prototype = Object.create(AddEvent.prototype)
 
-// loading images
-let loadImages = new ImageLoader();
-
 async function runAll () {
+  let loadImages = new ImageLoader();
   await loadImages.loadLeftSide(document.querySelector('.gallery'));
-
-  // console.log(loadImages)
   loadImages.eventForImages([...document.querySelectorAll('.gallery img')])
-  
 }
 
 runAll()
